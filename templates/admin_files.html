@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@{{ username }} Files | —͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#080808;color:#e5e7eb;font-family:'JetBrains Mono',monospace;min-height:100vh}
+    header{background:#0a0a0a;border-bottom:1px solid #fbbf2444;padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+    .back{background:transparent;border:1px solid #2a2a2a;color:#6b7280;width:32px;height:32px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:16px;transition:all .2s}
+    .back:hover{background:#1a1a1a;color:#fff}
+    .title{font-size:16px;font-weight:700;color:#fbbf24}
+    main{padding:20px;max-width:860px;margin:0 auto}
+    .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .filter-label{font-size:11px;color:#4b5563;flex-shrink:0}
+    .type-btn{padding:4px 10px;border-radius:5px;font-size:11px;font-family:inherit;cursor:pointer;border:1px solid #2a2a2a;color:#6b7280;background:transparent;transition:all .2s}
+    .type-btn.active{border-color:#00ff41;color:#00ff41;background:#0d1a0d}
+    .download-all-btn{padding:5px 14px;border-radius:7px;font-size:12px;font-family:inherit;cursor:pointer;border:2px solid #00ff41;color:#00ff41;background:transparent;text-decoration:none;transition:all .2s;font-weight:700}
+    .download-all-btn:hover{background:#0d1a0d}
+    .project-block{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;margin-bottom:16px;overflow:hidden}
+    .project-header{padding:10px 16px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:10px;background:#0d0d0d;flex-wrap:wrap}
+    .project-name{font-size:14px;font-weight:700;color:#fff}
+    .badge{padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;border:1px solid}
+    .badge.running{border-color:#00ff41;color:#00ff41}
+    .badge.stopped{border-color:#ef4444;color:#ef4444}
+    .runtime{font-size:11px;color:#4b5563}
+    .main-file-tag{font-size:11px;color:#fbbf24;margin-left:auto}
+    .dl-project{padding:4px 10px;border-radius:6px;font-size:11px;font-family:inherit;cursor:pointer;border:1px solid #00ff4166;color:#00ff41;background:transparent;text-decoration:none;transition:all .2s}
+    .dl-project:hover{background:#0d1a0d}
+    .file-table{width:100%;border-collapse:collapse}
+    .file-row{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid #0d0d0d;transition:background .15s}
+    .file-row:last-child{border-bottom:none}
+    .file-row:hover{background:#111}
+    .ext-badge{min-width:32px;font-size:11px;font-weight:700;text-align:right;flex-shrink:0}
+    .file-name{flex:1;font-size:12px;color:#9ca3af;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .file-name.main{color:#00ff41}
+    .file-path{font-size:10px;color:#374151;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+    .file-size{font-size:11px;color:#374151;flex-shrink:0}
+    .dl-btn{padding:3px 9px;border-radius:5px;font-size:12px;text-decoration:none;color:#00ff41;border:1px solid #00ff4144;transition:all .2s;flex-shrink:0}
+    .dl-btn:hover{background:#0d1a0d;border-color:#00ff41}
+    .file-summary{padding:5px 16px;font-size:10px;color:#374151;display:flex;gap:16px}
+    .empty{padding:14px 16px;font-size:12px;color:#374151}
+    #toast{position:fixed;bottom:20px;right:20px;background:#0a0a0a;border:1px solid #00ff41;border-radius:10px;padding:12px 18px;font-size:13px;color:#00ff41;transform:translateY(80px);opacity:0;transition:all .3s;z-index:200}
+    #toast.show{transform:translateY(0);opacity:1}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/admin" class="back">←</a>
+    <div style="flex:1">
+      <div class="title">@{{ username }} — Files</div>
+      <div style="font-size:11px;color:#4b5563;margin-top:2px">{{ file_data|length }} project(s)</div>
+    </div>
+    <a href="/admin/user/{{ username }}/download?type=all" class="download-all-btn">⬇ Download All Files</a>
+  </header>
+
+  <main>
+    <!-- Type filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter by type:</span>
+      {% set types = ['all', '.py', '.js', '.ts', '.json', '.txt', '.md', '.sh', '.html', '.css'] %}
+      {% for t in types %}
+      <button class="type-btn {% if loop.first %}active{% endif %}" data-type="{{ t }}" onclick="filterType(this,'{{ t }}')">{{ t }}</button>
+      {% endfor %}
+      <a id="dlAll" href="/admin/user/{{ username }}/download?type=all" class="download-all-btn">⬇ Download Filtered</a>
+    </div>
+
+    {% for name, data in file_data.items() %}
+    <div class="project-block">
+      <div class="project-header">
+        <span class="project-name">{{ name.upper() }}</span>
+        <span class="badge {{ data.config.status }}">{{ data.config.status.upper() }}</span>
+        <span class="runtime">{{ data.config.runtime }}</span>
+        {% if data.config.get('main_file') %}
+        <span class="main-file-tag">⚡ {{ data.config.get('main_file') }}</span>
+        {% endif %}
+        <a id="dl-{{ name }}" href="/admin/project/{{ name }}/download?type=all" class="dl-project" style="{% if not data.config.get('main_file') %}margin-left:auto{% endif %}">⬇ ZIP</a>
+      </div>
+
+      {% set real_files = data.files|selectattr('type','equalto','file')|list %}
+      {% if real_files %}
+      <div id="files-{{ name }}">
+        {% for f in real_files %}
+        {% set ext = f.name.split('.')[-1] if '.' in f.name else '' %}
+        <div class="file-row" data-ext=".{{ ext }}">
+          <span class="ext-badge" style="color:{% if ext=='py' %}#3b82f6{% elif ext=='js' %}#fbbf24{% elif ext=='ts' %}#38bdf8{% elif ext=='json' %}#a78bfa{% elif ext in ['sh','bash'] %}#22c55e{% elif ext=='html' %}#f97316{% elif ext=='css' %}#38bdf8{% else %}#6b7280{% endif %}">.{{ ext }}</span>
+          <span class="file-name {% if f.path == data.config.get('main_file') %}main{% endif %}">
+            {{ f.name }}{% if f.path == data.config.get('main_file') %} <span style="font-size:10px;border:1px solid #00ff4144;border-radius:3px;padding:1px 5px;color:#00ff41">main</span>{% endif %}
+          </span>
+          <span class="file-path" title="{{ f.path }}">{{ f.path }}</span>
+          <span class="file-size">{{ '%.1f'|format(f.size/1024) }}kb</span>
+          <a href="/admin/file/{{ name }}/download?path={{ f.path|urlencode }}" class="dl-btn" download="{{ f.name }}" title="Download {{ f.name }}">⬇</a>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="file-summary">
+        <span id="count-{{ name }}">{{ real_files|length }} files</span>
+        <span>{{ '%.1f'|format(real_files|sum(attribute='size')/1024) }}kb total</span>
+      </div>
+      {% else %}
+      <div class="empty">No files uploaded for this project</div>
+      {% endif %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:60px;color:#374151">No projects for @{{ username }}</div>
+    {% endfor %}
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    let currentType='all';
+    function filterType(el,type){
+      currentType=type;
+      document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('[data-ext]').forEach(row=>{
+        row.style.display=(type==='all'||row.dataset.ext===type)?'flex':'none';
+      });
+      document.getElementById('dlAll').href='/admin/user/{{ username }}/download?type='+encodeURIComponent(type);
+      document.querySelectorAll('[id^="dl-"]').forEach(a=>{
+        const name=a.id.replace('dl-','');
+        a.href='/admin/project/'+name+'/download?type='+encodeURIComponent(type);
+      });
+    }
+    function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+  </script>
+</body>
+</html>

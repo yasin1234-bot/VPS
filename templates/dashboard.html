@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>—͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸 — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#080808;color:#e5e7eb;font-family:'JetBrains Mono',monospace;min-height:100vh}
+    header{background:#0a0a0a;border-bottom:1px solid #00ff4133;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{display:flex;align-items:center;gap:8px}
+    .logo-skull{font-size:20px;filter:drop-shadow(0 0 6px #00ff41)}
+    .logo-name{color:#00ff41;font-weight:700;font-size:15px;letter-spacing:1px;text-shadow:0 0 8px #00ff41}
+    .header-stats{display:flex;gap:16px;font-size:11px;color:#00ff4188}
+    .header-right{display:flex;align-items:center;gap:8px}
+    .username{color:#a3e635;font-size:12px}
+    .btn{padding:5px 12px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;border:1px solid;transition:all .2s;text-decoration:none;display:inline-block}
+    .btn-green{border-color:#00ff4188;color:#00ff41;background:transparent}
+    .btn-green:hover{background:#00ff4111;box-shadow:0 0 8px #00ff4133}
+    .btn-amber{border-color:#fbbf2488;color:#fbbf24;background:transparent}
+    .btn-amber:hover{background:#fbbf2411}
+    .btn-red{border-color:#ef444488;color:#ef4444;background:transparent}
+    .btn-red:hover{background:#ef444411}
+    main{padding:20px;max-width:700px;margin:0 auto}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+    .stat-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:20px;text-align:center}
+    .stat-num{font-size:36px;font-weight:700}
+    .stat-num.green{color:#00ff41;text-shadow:0 0 16px #00ff41}
+    .stat-num.white{color:#e5e7eb}
+    .stat-label{font-size:11px;color:#4b5563;letter-spacing:2px;margin-top:4px}
+    .server-card{background:#0a0a0a;border:1px solid #1a1a1a;border-left:4px solid;border-radius:10px;padding:16px;margin-bottom:12px;transition:border-color .2s}
+    .server-card.running{border-left-color:#00ff41}
+    .server-card.stopped{border-left-color:#ef4444}
+    .server-card:hover{border-color:#00ff4133}
+    .server-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .server-name{font-weight:700;font-size:15px;color:#fff;letter-spacing:.5px}
+    .status-badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid}
+    .status-badge.running{border-color:#00ff41;color:#00ff41;box-shadow:0 0 8px #00ff4133}
+    .status-badge.stopped{border-color:#ef4444;color:#ef4444}
+    .server-sub{font-size:12px;color:#4b5563;margin-bottom:14px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .action-btn{width:40px;height:36px;background:transparent;border-radius:7px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;border:1px solid}
+    .empty{text-align:center;padding:60px 20px;color:#374151}
+    .empty-icon{font-size:48px;margin-bottom:12px;opacity:.3}
+    .fab{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:#00ff41;color:#000;border:none;font-size:26px;font-weight:700;cursor:pointer;box-shadow:0 0 20px #00ff4188;display:flex;align-items:center;justify-content:center;z-index:50;transition:transform .2s}
+    .fab:hover{transform:scale(1.1)}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:100}
+    .modal-bg.show{display:flex}
+    .modal{background:#0a0a0a;border:2px solid #00ff41;border-radius:12px;padding:28px;width:320px;box-shadow:0 0 32px #00ff4133}
+    .modal-title{font-size:14px;font-weight:700;color:#00ff41;letter-spacing:2px;margin-bottom:20px}
+    .form-group{margin-bottom:14px}
+    .form-label{font-size:11px;color:#6b7280;display:block;margin-bottom:6px;letter-spacing:1px}
+    .form-input{width:100%;padding:9px 12px;background:#111;border:1px solid #00ff4133;border-radius:7px;color:#00ff41;font-family:inherit;font-size:13px;outline:none}
+    .form-input:focus{border-color:#00ff41}
+    select.form-input option{background:#0a0a0a}
+    .modal-actions{display:flex;gap:10px;margin-top:20px}
+    .modal-btn{flex:1;padding:10px;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;border:2px solid #00ff41;background:transparent;color:#00ff41}
+    .modal-cancel{border-color:#333;color:#6b7280}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-skull">🤴</span>
+      <span class="logo-name">—͞𝚈𝙰𝚂𝙸𝙽 </>       𝙱𝙷𝙰𝙸 </span>
+    </div>
+    <div class="header-stats">
+      <span id="statCpu">CPU: --%</span>
+      <span id="statRam">RAM: --%</span>
+      <span id="statDisk">DISK: --%</span>
+    </div>
+    <div class="header-right">
+      <span class="username">@{{ username }}</span>
+      <a href="/admin/login" class="btn btn-amber">   ⚙ ADMIN</a>
+      <a href="/logout" class="btn btn-red">LOG OUT</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats">
+      <div class="stat-card"><div class="stat-num ac">{{ running }}</div><div class="stat-label">RUNNING</div></div>
+      <div class="stat-card"><div class="stat-num white">{{ total }}</div><div class="stat-label">TOTAL</div></div>
+    </div>
+
+    {% if servers %}
+      {% for name, cfg in servers.items() %}
+      <div class="server-card {{ cfg.status }}">
+        <div class="server-top">
+          <span class="server-name">{{ name.upper() }}</span>
+          <span class="status-badge {{ cfg.status }}">{{ cfg.status.upper() }}</span>
+        </div>
+        <div class="server-sub">{{ cfg.runtime }} {{ cfg.main_file or 'main.py' }}</div>
+        <div class="actions">
+          {% if cfg.status == 'running' %}
+          <form action="/server/{{ name }}/stop" method="POST" style="display:inline">
+            <button class="action-btn" style="border-color:#ef444488;color:#ef4444" title="Stop">■</button>
+          </form>
+          {% else %}
+          <form action="/server/{{ name }}/start" method="POST" style="display:inline">
+            <button class="action-btn" style="border-color:var(--ac-dim);color:var(--ac)" title="Start">▶</button>
+          </form>
+          {% endif %}
+          <a href="/server/{{ name }}" class="action-btn" style="border-color:#38bdf888;color:#38bdf8" title="View">👁</a>
+          <a href="/server/{{ name }}?tab=settings" class="action-btn" style="border-color:#c084fc88;color:#c084fc" title="Settings">⚙</a>
+          <form action="/server/delete/{{ name }}" method="POST" style="display:inline" onsubmit="return confirm('Delete {{ name }}?')">
+            <button class="action-btn" style="border-color:#ef444488;color:#ef4444" title="Delete">🗑</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <div class="empty-icon">🗂️</div>
+        <div>NO PROJECTS YET...!! CLICK + TO CREATE ONE...!!</div>
+      </div>
+    {% endif %}
+  </main>
+
+  <button class="fab" onclick="document.getElementById('createModal').classList.add('show')">+</button>
+
+  <div id="createModal" class="modal-bg" onclick="if(event.target===this)this.classList.remove('show')">
+    <div class="modal">
+      <div class="modal-title">NEW PROJECT</div>
+      <form action="/server/create" method="POST">
+        <div class="form-group">
+          <label class="form-label">PROJECT NAME</label>
+          <input class="form-input" name="name" placeholder="my-bot" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">RUNTIME</label>
+          <select class="form-input" name="runtime">
+            <option value="python">Python</option>
+            <option value="node">Node.js</option>
+            <option value="static">Static</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="modal-btn">CREATE</button>
+          <button type="button" class="modal-btn modal-cancel" onclick="document.getElementById('createModal').classList.remove('show')">CANCEL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    async function fetchStats(){
+      try{
+        const r=await fetch('/api/stats');
+        const d=await r.json();
+        document.getElementById('statCpu').textContent='CPU: '+d.cpu.toFixed(1)+'%';
+        document.getElementById('statRam').textContent='RAM: '+d.ram.toFixed(1)+'%';
+        document.getElementById('statDisk').textContent='DISK: '+d.disk.toFixed(1)+'%';
+      }catch(e){}
+    }
+    fetchStats();
+    setInterval(fetchStats,5000);
+  </script>
+</body>
+</html>

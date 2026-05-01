@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>—͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸— Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ac:{{ theme_color }};--ac-dim:{{ theme_color }}88;--ac-lite:{{ theme_color }}11;}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#05000f;font-family:'JetBrains Mono',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    canvas{position:fixed;inset:0;z-index:0}
+    .container{position:relative;z-index:10;width:100%;max-width:380px;padding:0 16px}
+    .card{background:#0a0010;border:2px solid var(--ac);border-radius:12px;padding:36px 32px;box-shadow:0 0 40px var(--ac-lite),0 0 80px var(--ac-lite)}
+    .skull{font-size:52px;text-align:center;margin-bottom:12px;filter:drop-shadow(0 0 12px var(--ac))}
+    .brand{text-align:center;font-size:22px;font-weight:700;color:var(--ac);letter-spacing:3px;text-shadow:0 0 12px var(--ac)}
+    .sub{text-align:center;font-size:11px;color:var(--ac-dim);letter-spacing:2px;margin-top:4px;margin-bottom:24px}
+    .prompt{font-size:13px;color:var(--ac);margin-bottom:16px;opacity:.85}
+    .cursor{display:inline-block;width:10px;height:15px;background:var(--ac);margin-left:4px;vertical-align:middle;animation:blink 1s step-end infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .error-box{background:#2a0808;border:1px solid #ef4444;border-radius:8px;padding:10px 14px;font-size:12px;color:#f87171;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    input{width:100%;padding:11px 14px;background:#0d000d;border:1px solid var(--ac-dim);border-radius:8px;color:var(--ac);font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;margin-bottom:12px;box-shadow:inset 0 0 8px var(--ac-lite);transition:border-color .2s}
+    input:focus{border-color:var(--ac)}
+    input::placeholder{color:var(--ac-dim)}
+    .pw-wrap{position:relative;margin-bottom:20px}
+    .pw-wrap input{margin-bottom:0;padding-right:44px}
+    .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ac-dim);font-size:16px;padding:0}
+    .auth-btn{width:100%;padding:13px;background:transparent;border:2px solid var(--ac);border-radius:8px;color:var(--ac);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;box-shadow:0 0 12px var(--ac-lite);transition:all .2s}
+    .auth-btn:hover{background:var(--ac-lite);box-shadow:0 0 24px var(--ac-dim)}
+    .footer{text-align:center;margin-top:24px;font-size:10px;color:var(--ac-dim);letter-spacing:1px;line-height:1.8;opacity:.4}
+    .admin-link{display:block;text-align:center;margin-top:12px;font-size:11px;color:#fbbf2466;text-decoration:none;transition:color .2s}
+    .admin-link:hover{color:#fbbf24}
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="container">
+    <div class="card">
+      <div class="skull">👑</div>
+      <div class="brand">—͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸</div>
+      <div class="sub"> $ SECURE TERMINAL V2.3</div>
+      <div class="prompt">&gt; LOGIN_REQUIRED —͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸 💘<span class="cursor"></span></div>
+      {% if error %}
+      <div class="error-box">▲ {{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <input type="text" name="username" placeholder="Username" required autocomplete="username">
+        <div class="pw-wrap">
+          <input type="password" name="password" placeholder="Password" id="pw" autocomplete="current-password">
+          <button type="button" class="eye-btn" onclick="togglePw()">👁</button>
+        </div>
+        <button type="submit" class="auth-btn">&gt;_< AUTHENTICATE</button>
+      </form>
+      <a href="/admin/login" class="admin-link">⚙ ADMIN PANEL</a>
+      <div class="footer">⚠ UNAUTHORIZED POWER ACCESS PROHIBITED<br>—͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸 thaꤨ SECURE SYSTEMS ⚠</div>
+    </div>
+  </div>
+  <script>
+    const AC=getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
+    const canvas=document.getElementById('matrix'),ctx=canvas.getContext('2d');
+    canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+    const chars='アイウエオカキクケコ01—͞𝚈𝙰𝚂𝙸𝙽 </> 𝙱𝙷𝙰𝙸01';
+    const cols=Math.floor(canvas.width/16),drops=Array(cols).fill(1);
+    setInterval(()=>{
+      ctx.fillStyle='rgba(5,0,15,0.06)';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle=AC+'22';ctx.font='13px JetBrains Mono,monospace';
+      for(let i=0;i<drops.length;i++){ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,drops[i]*16);if(drops[i]*16>canvas.height&&Math.random()>.975)drops[i]=0;drops[i]++;}
+    },55);
+    window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+    function togglePw(){const p=document.getElementById('pw');p.type=p.type==='password'?'text':'password';}
+  </script>
+</body>
+</html>
