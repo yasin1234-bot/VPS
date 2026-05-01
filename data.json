@@ -1,0 +1,62 @@
+{
+  "servers": {
+    "FF": {
+      "name": "FF",
+      "owner": "ff",
+      "runtime": "python",
+      "status": "stopped",
+      "main_file": "",
+      "port": 8080,
+      "packages": [],
+      "pid": null,
+      "created": "2026-04-30T15:26:41.946607",
+      "auto_reset": {
+        "enabled": false,
+        "years": 0,
+        "days": 0,
+        "hours": 0,
+        "minutes": 0,
+        "seconds": 0
+      }
+    },
+    "YASIN": {
+      "name": "YASIN",
+      "owner": "YASIN\u3005BHAI",
+      "runtime": "python",
+      "status": "stopped",
+      "main_file": "",
+      "port": 8080,
+      "packages": [],
+      "pid": null,
+      "created": "2026-04-30T18:16:58.611984",
+      "auto_reset": {
+        "enabled": false,
+        "years": 0,
+        "days": 0,
+        "hours": 0,
+        "minutes": 0,
+        "seconds": 0
+      }
+    }
+  },
+  "users": {
+    "ff": {
+      "joined": "2026-04-30T15:26:23.530647",
+      "password_hash": "05a9bf223fedf80a9d0da5f73f5c191a665bf4a0a4a3e608f2f9e7d5ff23959c"
+    },
+    "FF": {
+      "joined": "2026-04-30T15:28:12.987207",
+      "password_hash": "096aa8510b0dc13190f1f237db8e29ad6ea34e2f779f2088c7826248535fbf6a"
+    },
+    "YASIN\u3005BHAI": {
+      "joined": "2026-04-30T18:16:52.226554",
+      "password_hash": "a0efa36084a2677f15e18607daece9b8a34ae8217e60734aa5fb348f97e9ba2f"
+    }
+  },
+  "settings": {
+    "maintenance": false,
+    "maintenance_msg": "System under maintenance.",
+    "theme_color": "#38bdf8",
+    "auto_theme": true
+  }
+}
